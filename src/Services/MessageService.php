@@ -14,6 +14,7 @@ class MessageService
 
     protected $type = 'text';
     protected $body;
+    protected $data;
     /**
      * @var CommandBus
      */
@@ -52,6 +53,23 @@ class MessageService
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * @param array|null
+     * 
+     * @return $this
+     */
+    public function data(array $data = null)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    public function getData()
+    {
+        return $this->message->data;
     }
 
     public function getById($id)
@@ -120,7 +138,7 @@ class MessageService
             throw new Exception('Message receiver has not been set');
         }
 
-        $command = new SendMessageCommand($this->recipient, $this->body, $this->sender, $this->type);
+        $command = new SendMessageCommand($this->recipient, $this->body, $this->sender, $this->type, $this->data);
 
         return $this->commandBus->execute($command);
     }

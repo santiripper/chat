@@ -261,4 +261,19 @@ class MessageTest extends TestCase
 
         $this->assertSame(['name', 'bot_id'], array_keys($conversation->messages[0]->sender));
     }
+
+    /** @test */
+    public function it_adds_data_to_a_message()
+    {
+        $payload = ['custom' => 'payload'];
+        
+        $conversation = Chat::createConversation([$this->alpha, $this->bravo]);
+        $message = Chat::message('Hello')
+            ->from($this->alpha)
+            ->to($conversation)
+            ->data($payload)
+            ->send();
+
+        $this->assertEquals($payload, Chat::message($message)->getData());
+    }
 }
